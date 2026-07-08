@@ -412,6 +412,8 @@ class FluxGrabApp(ctk.CTk):
         entry.error_lbl = error_lbl
 
     def _update_queue_item_ui(self, entry: _QueueEntry, progress: float | None = None, pct_text: str = "") -> None:
+        if entry.frame is None or entry not in self._queue:
+            return
         color = _STATUS_COLOR[entry.status]
         entry.dot_lbl.configure(text=_STATUS_DOT[entry.status], text_color=color)
 
@@ -455,6 +457,7 @@ class FluxGrabApp(ctk.CTk):
             self._queue.remove(entry)
         if entry.frame:
             entry.frame.destroy()
+        entry.frame = None
         self._rebuild_queue_grid()
         self._show_empty_if_needed()
 
@@ -491,6 +494,7 @@ class FluxGrabApp(ctk.CTk):
             self._queue.remove(e)
             if e.frame:
                 e.frame.destroy()
+            e.frame = None
         self._rebuild_queue_grid()
         self._show_empty_if_needed()
 
